@@ -1,0 +1,989 @@
+{
+  "edition": "simple-render-v1",
+  "ticket": "STUDIO-5864",
+  "deployment": {
+    "root_directory": "",
+    "publish_directory": ".",
+    "build_command": "echo \"No build required\""
+  },
+  "headers": {
+    "/header-tests/x-noindex.html": "noindex",
+    "/header-tests/x-nofollow.html": "nofollow",
+    "/header-tests/x-noindex-nofollow.html": "noindex, nofollow",
+    "/header-tests/x-uppercase.html": "NOINDEX, NOFOLLOW",
+    "/header-tests/x-noindex-plus-meta-nofollow.html": "noindex"
+  },
+  "scenarios": [
+    {
+      "id": "BASE-001",
+      "name": "Baseline control",
+      "path": "/baseline.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Control",
+      "group": "control",
+      "starter": true,
+      "token": "QA5864_BASE001_PARENT",
+      "notes": "Run this control first. Both the source page and its child must be fetched and indexed before interpreting a negative test.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/base001-child.html",
+          "token": "QA5864_BASE001_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/base001-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-001",
+      "name": "Generic noindex",
+      "path": "/meta-tests/noindex.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": true,
+      "token": "QA5864_META001_PARENT",
+      "notes": "noindex is independent of nofollow. The page can still be fetched and processed to discover its child.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta001-child.html",
+          "token": "QA5864_META001_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta001-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-002",
+      "name": "Generic nofollow",
+      "path": "/meta-tests/nofollow.html",
+      "expected_index": "Indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": true,
+      "token": "QA5864_META002_PARENT",
+      "notes": "The source page itself can be indexed. Only links discovered on it are suppressed.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta002-child.html",
+          "token": "QA5864_META002_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta002-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-003",
+      "name": "Generic noindex + nofollow",
+      "path": "/meta-tests/noindex-nofollow.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": true,
+      "token": "QA5864_META003_PARENT",
+      "notes": "The source can be fetched, but must not be added or updated in the index. Its child must not be queued from this page.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta003-child.html",
+          "token": "QA5864_META003_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex, nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta003-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-004",
+      "name": "Uppercase directives",
+      "path": "/meta-tests/uppercase.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": false,
+      "token": "QA5864_META004_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta004-child.html",
+          "token": "QA5864_META004_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"NOINDEX, NOFOLLOW\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta004-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-005",
+      "name": "Comma no space",
+      "path": "/meta-tests/no-space-comma.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": false,
+      "token": "QA5864_META005_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta005-child.html",
+          "token": "QA5864_META005_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex,nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta005-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-006",
+      "name": "Whitespace separated",
+      "path": "/meta-tests/whitespace-separated.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "meta",
+      "starter": false,
+      "token": "QA5864_META006_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta006-child.html",
+          "token": "QA5864_META006_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex    nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta006-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "META-007",
+      "name": "Mixed spacing",
+      "path": "/meta-tests/mixed-spacing.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Edge",
+      "group": "meta",
+      "starter": false,
+      "token": "QA5864_META007_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/meta007-child.html",
+          "token": "QA5864_META007_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"  noindex ,    nofollow  \">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/meta007-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "BOT-001",
+      "name": "Googlebot-only noindex",
+      "path": "/bot-tests/googlebot-noindex.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Required",
+      "group": "bot",
+      "starter": false,
+      "token": "QA5864_BOT001_PARENT",
+      "notes": "Run with the configured SearchStax crawler user-agent, not Googlebot. A Googlebot-only restriction must not leak to an unrelated crawler.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/bot001-child.html",
+          "token": "QA5864_BOT001_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"googlebot\" content=\"noindex\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/bot001-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "BOT-002",
+      "name": "Generic noindex + Googlebot index",
+      "path": "/bot-tests/generic-noindex-googlebot-index.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Follow child",
+      "classification": "Required",
+      "group": "bot",
+      "starter": false,
+      "token": "QA5864_BOT002_PARENT",
+      "notes": "An unrelated Googlebot-specific index directive must not cancel the generic noindex directive for SearchStax.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/bot002-child.html",
+          "token": "QA5864_BOT002_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex\">\n<meta name=\"googlebot\" content=\"index\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/bot002-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "BOT-003",
+      "name": "SearchStax-specific precedence",
+      "path": "/bot-tests/searchstax-specific-conditional.html",
+      "expected_index": "Conditional",
+      "expected_links": "Conditional",
+      "classification": "Clarify UA token",
+      "group": "bot",
+      "starter": false,
+      "token": "QA5864_BOT003_PARENT",
+      "notes": "DECISION REQUIRED: searchstax is a placeholder meta name, not a verified supported token. Replace it in this HTML file with the engineering-confirmed token. If the matching specific index/follow directives override the generic rule as described, both page and child are indexed. If the name is not supported, generic noindex/nofollow applies. Confirm that positive index/follow directives are supported before sign-off.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/bot003-child.html",
+          "token": "QA5864_BOT003_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex, nofollow\">\n<meta name=\"searchstax\" content=\"index, follow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/bot003-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "HDR-001",
+      "name": "Header noindex",
+      "path": "/header-tests/x-noindex.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Follow child",
+      "classification": "Required",
+      "group": "header",
+      "starter": false,
+      "token": "QA5864_HDR001_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": "noindex",
+      "targets": [
+        {
+          "path": "/targets/hdr001-child.html",
+          "token": "QA5864_HDR001_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/hdr001-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "HDR-002",
+      "name": "Header nofollow",
+      "path": "/header-tests/x-nofollow.html",
+      "expected_index": "Indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "header",
+      "starter": false,
+      "token": "QA5864_HDR002_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": "nofollow",
+      "targets": [
+        {
+          "path": "/targets/hdr002-child.html",
+          "token": "QA5864_HDR002_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/hdr002-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "HDR-003",
+      "name": "Header noindex + nofollow",
+      "path": "/header-tests/x-noindex-nofollow.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Required",
+      "group": "header",
+      "starter": false,
+      "token": "QA5864_HDR003_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": "noindex, nofollow",
+      "targets": [
+        {
+          "path": "/targets/hdr003-child.html",
+          "token": "QA5864_HDR003_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/hdr003-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "HDR-004",
+      "name": "Header uppercase",
+      "path": "/header-tests/x-uppercase.html",
+      "expected_index": "Not indexed",
+      "expected_links": "Do not follow child",
+      "classification": "Edge",
+      "group": "header",
+      "starter": false,
+      "token": "QA5864_HDR004_PARENT",
+      "notes": "Run from this exact Start URL. Verify directive parsing using this page source and the crawler logs.",
+      "header": "NOINDEX, NOFOLLOW",
+      "targets": [
+        {
+          "path": "/targets/hdr004-child.html",
+          "token": "QA5864_HDR004_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/hdr004-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "HDR-005",
+      "name": "Header noindex + meta nofollow",
+      "path": "/header-tests/x-noindex-plus-meta-nofollow.html",
+      "expected_index": "Not indexed*",
+      "expected_links": "Do not follow*",
+      "classification": "Clarify merge",
+      "group": "header",
+      "starter": false,
+      "token": "QA5864_HDR005_PARENT",
+      "notes": "DECISION REQUIRED: the proposed combined outcome is noindex from the response header plus nofollow from HTML. Confirm the cross-source combination policy before treating this probe as a release-blocking failure.",
+      "header": "noindex",
+      "targets": [
+        {
+          "path": "/targets/hdr005-child.html",
+          "token": "QA5864_HDR005_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/hdr005-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "LINK-001",
+      "name": "Per-link nofollow",
+      "path": "/link-tests/basic.html",
+      "expected_index": "Indexed",
+      "expected_links": "Normal yes / nofollow no",
+      "classification": "Required",
+      "group": "link",
+      "starter": true,
+      "token": "QA5864_LINK001_PARENT",
+      "notes": "Only the nofollow occurrence is suppressed. The normal link on the same source page must still be followed.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/link001-child-1.html",
+          "token": "QA5864_LINK001_CHILD1"
+        },
+        {
+          "path": "/targets/link001-child-2.html",
+          "token": "QA5864_LINK001_CHILD2"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/link001-child-1.html",
+          "rel": "",
+          "label": "Child link 1"
+        },
+        {
+          "path": "/targets/link001-child-2.html",
+          "rel": "nofollow",
+          "label": "Child link 2"
+        }
+      ]
+    },
+    {
+      "id": "LINK-002",
+      "name": "rel=NOFOLLOW",
+      "path": "/link-tests/case-insensitive.html",
+      "expected_index": "Indexed",
+      "expected_links": "Do not follow",
+      "classification": "Required",
+      "group": "link",
+      "starter": false,
+      "token": "QA5864_LINK002_PARENT",
+      "notes": "rel matching is case-insensitive. NOFOLLOW must suppress the link occurrence.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/link002-child.html",
+          "token": "QA5864_LINK002_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/link002-child.html",
+          "rel": "NOFOLLOW",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "LINK-003",
+      "name": "rel multiple values",
+      "path": "/link-tests/multiple-rel-values.html",
+      "expected_index": "Indexed",
+      "expected_links": "Do not follow",
+      "classification": "Required",
+      "group": "link",
+      "starter": false,
+      "token": "QA5864_LINK003_PARENT",
+      "notes": "Match a complete whitespace-separated rel token. external and noopener do not cancel nofollow.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/link003-child.html",
+          "token": "QA5864_LINK003_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/link003-child.html",
+          "rel": "external noopener nofollow",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "LINK-004",
+      "name": "rel substring negative",
+      "path": "/link-tests/substring-negative.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Edge",
+      "group": "link",
+      "starter": false,
+      "token": "QA5864_LINK004_PARENT",
+      "notes": "nofollowed is not the nofollow token. Do not suppress the link by matching a substring.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/link004-child.html",
+          "token": "QA5864_LINK004_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/link004-child.html",
+          "rel": "external nofollowed",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "LINK-005",
+      "name": "Same target mixed occurrences",
+      "path": "/link-tests/same-target-mixed-occurrences.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow via normal occurrence",
+      "classification": "Edge",
+      "group": "link",
+      "starter": false,
+      "token": "QA5864_LINK005_PARENT",
+      "notes": "The same URL occurs twice: once nofollow and once normal. It can be queued from the normal occurrence; nofollow is not a global URL blacklist.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/link005-child.html",
+          "token": "QA5864_LINK005_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/link005-child.html",
+          "rel": "nofollow",
+          "label": "Child link 1"
+        },
+        {
+          "path": "/targets/link005-child.html",
+          "rel": "",
+          "label": "Child link 2"
+        }
+      ]
+    },
+    {
+      "id": "EDGE-001",
+      "name": "Multiple meta tags",
+      "path": "/edge-tests/multiple-meta-tags.html",
+      "expected_index": "Not indexed*",
+      "expected_links": "Do not follow*",
+      "classification": "Clarify merge",
+      "group": "edge",
+      "starter": false,
+      "token": "QA5864_EDGE001_PARENT",
+      "notes": "DECISION REQUIRED: proposed outcome combines the two separate robots meta tags. Confirm aggregation policy with engineering before sign-off.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/edge001-child.html",
+          "token": "QA5864_EDGE001_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"noindex\">\n<meta name=\"robots\" content=\"nofollow\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/edge001-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "EDGE-002",
+      "name": "Invalid directive substrings",
+      "path": "/edge-tests/invalid-token-substrings.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Negative",
+      "group": "edge",
+      "starter": false,
+      "token": "QA5864_EDGE002_PARENT",
+      "notes": "xnoindex and nofollowed are not the noindex and nofollow directives. Do not match substrings.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/edge002-child.html",
+          "token": "QA5864_EDGE002_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"xnoindex nofollowed\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/edge002-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "EDGE-003",
+      "name": "Empty content",
+      "path": "/edge-tests/empty-content.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Negative",
+      "group": "edge",
+      "starter": false,
+      "token": "QA5864_EDGE003_PARENT",
+      "notes": "An empty content attribute contributes no directives. The parent and child should behave like the control.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/edge003-child.html",
+          "token": "QA5864_EDGE003_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\" content=\"\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/edge003-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "EDGE-004",
+      "name": "Missing content",
+      "path": "/edge-tests/missing-content.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Negative",
+      "group": "edge",
+      "starter": false,
+      "token": "QA5864_EDGE004_PARENT",
+      "notes": "A robots meta tag without content contributes no directives and must not crash the crawl.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/edge004-child.html",
+          "token": "QA5864_EDGE004_CHILD"
+        }
+      ],
+      "metas": "<meta name=\"robots\">",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/targets/edge004-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "EDGE-005",
+      "name": "Meta outside head",
+      "path": "/edge-tests/meta-in-body.html",
+      "expected_index": "Indexed",
+      "expected_links": "Follow child",
+      "classification": "Edge",
+      "group": "edge",
+      "starter": false,
+      "token": "QA5864_EDGE005_PARENT",
+      "notes": "This intentionally places the actual robots meta element inside body, not head. The supplied requirement is to inspect head; this probe expects the body element not to suppress indexing or discovery.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/targets/edge005-child.html",
+          "token": "QA5864_EDGE005_CHILD"
+        }
+      ],
+      "metas": "",
+      "body_meta": "<meta name=\"robots\" content=\"noindex, nofollow\">",
+      "links": [
+        {
+          "path": "/targets/edge005-child.html",
+          "rel": "",
+          "label": "Open child page"
+        }
+      ]
+    },
+    {
+      "id": "ROBOTS-001",
+      "name": "robots.txt interaction",
+      "path": "/robots-entry.html",
+      "expected_index": "Entry indexed; blocked pages vary",
+      "expected_links": "See OFF/ON comparison",
+      "classification": "Critical interaction",
+      "group": "robots",
+      "starter": true,
+      "token": "QA5864_ROBOTS001_PARENT",
+      "notes": "Run once with Ignore robots.txt OFF and once with it ON, with a clean index for each run. The setting must bypass robots.txt only, not page-level directives.",
+      "header": null,
+      "targets": [
+        {
+          "path": "/robots-blocked/indexable.html",
+          "child": "/targets/robots-indexable-child.html"
+        },
+        {
+          "path": "/robots-blocked/noindex.html",
+          "child": "/targets/robots-noindex-child.html"
+        },
+        {
+          "path": "/robots-blocked/nofollow.html",
+          "child": "/targets/robots-nofollow-child.html"
+        },
+        {
+          "path": "/robots-blocked/noindex-nofollow.html",
+          "child": "/targets/robots-noindex-nofollow-child.html"
+        }
+      ],
+      "metas": "",
+      "body_meta": "",
+      "links": [
+        {
+          "path": "/robots-blocked/indexable.html",
+          "rel": "",
+          "label": "Blocked path: indexable"
+        },
+        {
+          "path": "/robots-blocked/noindex.html",
+          "rel": "",
+          "label": "Blocked path: noindex"
+        },
+        {
+          "path": "/robots-blocked/nofollow.html",
+          "rel": "",
+          "label": "Blocked path: nofollow"
+        },
+        {
+          "path": "/robots-blocked/noindex-nofollow.html",
+          "rel": "",
+          "label": "Blocked path: noindex-nofollow"
+        }
+      ]
+    },
+    {
+      "id": "STATE-001",
+      "name": "Existing indexed document -> noindex",
+      "path": "/state-transition/page.html",
+      "expected_index": "Transition probe",
+      "expected_links": "N/A",
+      "classification": "Clarify deletion",
+      "group": "state",
+      "starter": false,
+      "token": "QA5864_STATE001_V1",
+      "notes": "This is a same-URL update test. Do not create a second URL. The requirement forbids adding/updating noindex content, but does not settle whether the previously indexed document is retained or deleted.",
+      "header": null,
+      "targets": [],
+      "metas": "<meta name=\"robots\" content=\"index, follow\">",
+      "body_meta": "",
+      "links": []
+    }
+  ],
+  "children": {
+    "/targets/base001-child.html": {
+      "token": "QA5864_BASE001_CHILD",
+      "case_id": "BASE-001",
+      "source": "/baseline.html"
+    },
+    "/targets/meta001-child.html": {
+      "token": "QA5864_META001_CHILD",
+      "case_id": "META-001",
+      "source": "/meta-tests/noindex.html"
+    },
+    "/targets/meta002-child.html": {
+      "token": "QA5864_META002_CHILD",
+      "case_id": "META-002",
+      "source": "/meta-tests/nofollow.html"
+    },
+    "/targets/meta003-child.html": {
+      "token": "QA5864_META003_CHILD",
+      "case_id": "META-003",
+      "source": "/meta-tests/noindex-nofollow.html"
+    },
+    "/targets/meta004-child.html": {
+      "token": "QA5864_META004_CHILD",
+      "case_id": "META-004",
+      "source": "/meta-tests/uppercase.html"
+    },
+    "/targets/meta005-child.html": {
+      "token": "QA5864_META005_CHILD",
+      "case_id": "META-005",
+      "source": "/meta-tests/no-space-comma.html"
+    },
+    "/targets/meta006-child.html": {
+      "token": "QA5864_META006_CHILD",
+      "case_id": "META-006",
+      "source": "/meta-tests/whitespace-separated.html"
+    },
+    "/targets/meta007-child.html": {
+      "token": "QA5864_META007_CHILD",
+      "case_id": "META-007",
+      "source": "/meta-tests/mixed-spacing.html"
+    },
+    "/targets/bot001-child.html": {
+      "token": "QA5864_BOT001_CHILD",
+      "case_id": "BOT-001",
+      "source": "/bot-tests/googlebot-noindex.html"
+    },
+    "/targets/bot002-child.html": {
+      "token": "QA5864_BOT002_CHILD",
+      "case_id": "BOT-002",
+      "source": "/bot-tests/generic-noindex-googlebot-index.html"
+    },
+    "/targets/bot003-child.html": {
+      "token": "QA5864_BOT003_CHILD",
+      "case_id": "BOT-003",
+      "source": "/bot-tests/searchstax-specific-conditional.html"
+    },
+    "/targets/hdr001-child.html": {
+      "token": "QA5864_HDR001_CHILD",
+      "case_id": "HDR-001",
+      "source": "/header-tests/x-noindex.html"
+    },
+    "/targets/hdr002-child.html": {
+      "token": "QA5864_HDR002_CHILD",
+      "case_id": "HDR-002",
+      "source": "/header-tests/x-nofollow.html"
+    },
+    "/targets/hdr003-child.html": {
+      "token": "QA5864_HDR003_CHILD",
+      "case_id": "HDR-003",
+      "source": "/header-tests/x-noindex-nofollow.html"
+    },
+    "/targets/hdr004-child.html": {
+      "token": "QA5864_HDR004_CHILD",
+      "case_id": "HDR-004",
+      "source": "/header-tests/x-uppercase.html"
+    },
+    "/targets/hdr005-child.html": {
+      "token": "QA5864_HDR005_CHILD",
+      "case_id": "HDR-005",
+      "source": "/header-tests/x-noindex-plus-meta-nofollow.html"
+    },
+    "/targets/link001-child-1.html": {
+      "token": "QA5864_LINK001_CHILD1",
+      "case_id": "LINK-001",
+      "source": "/link-tests/basic.html"
+    },
+    "/targets/link001-child-2.html": {
+      "token": "QA5864_LINK001_CHILD2",
+      "case_id": "LINK-001",
+      "source": "/link-tests/basic.html"
+    },
+    "/targets/link002-child.html": {
+      "token": "QA5864_LINK002_CHILD",
+      "case_id": "LINK-002",
+      "source": "/link-tests/case-insensitive.html"
+    },
+    "/targets/link003-child.html": {
+      "token": "QA5864_LINK003_CHILD",
+      "case_id": "LINK-003",
+      "source": "/link-tests/multiple-rel-values.html"
+    },
+    "/targets/link004-child.html": {
+      "token": "QA5864_LINK004_CHILD",
+      "case_id": "LINK-004",
+      "source": "/link-tests/substring-negative.html"
+    },
+    "/targets/link005-child.html": {
+      "token": "QA5864_LINK005_CHILD",
+      "case_id": "LINK-005",
+      "source": "/link-tests/same-target-mixed-occurrences.html"
+    },
+    "/targets/edge001-child.html": {
+      "token": "QA5864_EDGE001_CHILD",
+      "case_id": "EDGE-001",
+      "source": "/edge-tests/multiple-meta-tags.html"
+    },
+    "/targets/edge002-child.html": {
+      "token": "QA5864_EDGE002_CHILD",
+      "case_id": "EDGE-002",
+      "source": "/edge-tests/invalid-token-substrings.html"
+    },
+    "/targets/edge003-child.html": {
+      "token": "QA5864_EDGE003_CHILD",
+      "case_id": "EDGE-003",
+      "source": "/edge-tests/empty-content.html"
+    },
+    "/targets/edge004-child.html": {
+      "token": "QA5864_EDGE004_CHILD",
+      "case_id": "EDGE-004",
+      "source": "/edge-tests/missing-content.html"
+    },
+    "/targets/edge005-child.html": {
+      "token": "QA5864_EDGE005_CHILD",
+      "case_id": "EDGE-005",
+      "source": "/edge-tests/meta-in-body.html"
+    },
+    "/targets/robots-indexable-child.html": {
+      "token": "QA5864_ROBOTS_INDEXABLE_CHILD",
+      "case_id": "ROBOTS-001",
+      "source": "/robots-blocked/indexable.html"
+    },
+    "/targets/robots-noindex-child.html": {
+      "token": "QA5864_ROBOTS_NOINDEX_CHILD",
+      "case_id": "ROBOTS-001",
+      "source": "/robots-blocked/noindex.html"
+    },
+    "/targets/robots-nofollow-child.html": {
+      "token": "QA5864_ROBOTS_NOFOLLOW_CHILD",
+      "case_id": "ROBOTS-001",
+      "source": "/robots-blocked/nofollow.html"
+    },
+    "/targets/robots-noindex-nofollow-child.html": {
+      "token": "QA5864_ROBOTS_NOINDEXNOFOLLOW_CHILD",
+      "case_id": "ROBOTS-001",
+      "source": "/robots-blocked/noindex-nofollow.html"
+    }
+  }
+}

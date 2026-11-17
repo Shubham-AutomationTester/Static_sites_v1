@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="qa-fixture-path" content="/robots-blocked/noindex.html">
+<title>noindex / robots.txt interaction | Robots Test Lab</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/styles.css">
+<script src="/app.js" defer></script>
+</head>
+<body data-qa-case="ROBOTS-001">
+<header class="topbar"><div class="wrap topbar-inner"><div class="brand"><span class="mark" aria-hidden="true">R</span><div>Robots Test Lab<small>STUDIO-5864 / QA FIXTURE</small></div></div><div class="topnote">Static HTML. One test at a time.</div></div></header>
+<div class="wrap back"><button class="btn secondary compact" data-open="/index.html">Back to tests</button></div><main class="wrap"><section class="hero"><div class="eyebrow">ROBOTS-001 / blocked by robots.txt</div><h1>noindex page</h1><p class="lead">This URL is under <code>/robots-blocked/</code>. With Ignore robots.txt OFF, it must not be fetched.</p></section><section class="panel"><h2>When Ignore robots.txt is ON</h2><div class="outcome-grid"><div class="outcome"><span>Fetch this page</span><strong>Yes</strong></div><div class="outcome"><span>Index this page</span><strong>No</strong></div><div class="outcome"><span>Follow child link</span><strong>Yes</strong></div></div><p class="small" style="margin-top:16px">The child is outside the robots-blocked directory. Only this source links to it.</p></section><section class="panel"><h2>Page marker</h2><span class="marker">QA5864_ROBOTS_NOINDEX_PARENT</span></section><section class="panel"><h2>Actual test link</h2><div class="controlled-link"><a href="/targets/robots-noindex-child.html">Open the child for this page</a></div></section><details class="setup"><summary>Directive in this file</summary><div class="setup-content"><pre><code>&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;</code></pre></div></details></main>
+<footer class="footer"><div class="wrap"><span>SearchStax QA fixture / Simple Render edition</span><span>Expected outcomes are not actual crawler results.</span></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body></html>
